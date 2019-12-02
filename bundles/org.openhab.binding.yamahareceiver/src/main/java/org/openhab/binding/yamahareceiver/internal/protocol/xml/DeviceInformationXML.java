@@ -12,17 +12,14 @@
  */
 package org.openhab.binding.yamahareceiver.internal.protocol.xml;
 
-import static org.openhab.binding.yamahareceiver.internal.YamahaReceiverBindingConstants.Zone.*;
 import static org.openhab.binding.yamahareceiver.internal.protocol.xml.XMLConstants.Commands.*;
-import static org.openhab.binding.yamahareceiver.internal.protocol.xml.XMLProtocolService.*;
+import static org.openhab.binding.yamahareceiver.internal.protocol.xml.XMLProtocolService.getResponse;
 import static org.openhab.binding.yamahareceiver.internal.protocol.xml.XMLUtils.*;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-import org.openhab.binding.yamahareceiver.internal.YamahaReceiverBindingConstants.Feature;
 import org.openhab.binding.yamahareceiver.internal.YamahaReceiverBindingConstants.Zone;
 import org.openhab.binding.yamahareceiver.internal.protocol.AbstractConnection;
 import org.openhab.binding.yamahareceiver.internal.protocol.DeviceInformation;
@@ -117,31 +114,7 @@ public class DeviceInformationXML implements DeviceInformation {
             descriptor.features.forEach((feature, x) -> state.features.add(feature));
         }
 
-        detectZoneBSupport(con);
-
         logger.debug("Found zones: {}, features: {}", state.zones, state.features);
-    }
-
-    /**
-     * Detect if Zone_B is supported (HTR-4069). This will allow Zone_2 to be emulated by the Zone_B feature.
-     *
-     * @param con
-     * @throws IOException
-     * @throws ReceivedMessageParseException
-     */
-    private void detectZoneBSupport(XMLConnection con) throws IOException, ReceivedMessageParseException {
-        if (state.zones.contains(Main_Zone) && !state.zones.contains(Zone_2)) {
-            // Detect if Zone_B is supported (HTR-4069). This will allow Zone_2 to be emulated.
-
-            // Retrieve Main_Zone basic status, from which we will know this AVR supports Zone_B feature.
-            Node basicStatusNode = getZoneResponse(con, Main_Zone, ZONE_BASIC_STATUS_CMD, ZONE_BASIC_STATUS_PATH);
-            String power = getNodeContentOrEmpty(basicStatusNode, "Power_Control/Zone_B_Power_Info");
-            if (StringUtils.isNotEmpty(power)) {
-                logger.debug("Zone_2 emulation enabled via Zone_B");
-                state.zones.add(Zone_2);
-                state.features.add(Feature.ZONE_B);
-            }
-        }
     }
 
     private boolean isFeatureSupported(Node node, String name) {

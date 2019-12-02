@@ -14,7 +14,6 @@ package org.openhab.binding.yamahareceiver.internal.protocol.xml;
 
 import java.util.function.Supplier;
 
-import org.openhab.binding.yamahareceiver.internal.YamahaReceiverBindingConstants;
 import org.openhab.binding.yamahareceiver.internal.config.YamahaBridgeConfig;
 import org.openhab.binding.yamahareceiver.internal.config.YamahaZoneConfig;
 import org.openhab.binding.yamahareceiver.internal.protocol.AbstractConnection;
@@ -94,10 +93,6 @@ public class XMLProtocolFactory implements ProtocolFactory {
             ZoneControlStateListener listener, Supplier<InputConverter> inputConverterSupplier,
             DeviceInformationState deviceInformationState) {
 
-        if (isZoneB(zoneSettings.getZone(), deviceInformationState)) {
-            return new ZoneBControlXML(connection, zoneSettings, listener, deviceInformationState,
-                    inputConverterSupplier);
-        }
         return new ZoneControlXML(connection, zoneSettings.getZone(), zoneSettings, listener, deviceInformationState,
                 inputConverterSupplier);
     }
@@ -107,22 +102,7 @@ public class XMLProtocolFactory implements ProtocolFactory {
             AvailableInputStateListener listener, Supplier<InputConverter> inputConverterSupplier,
             DeviceInformationState deviceInformationState) {
 
-        if (isZoneB(zoneSettings.getZone(), deviceInformationState)) {
-            return new ZoneBAvailableInputsXML(connection, listener, inputConverterSupplier);
-        }
         return new ZoneAvailableInputsXML(connection, zoneSettings.getZone(), listener, inputConverterSupplier);
-    }
-
-    /**
-     * Checks if the specified Zone_2 should be emulated using Zone_B feature.
-     *
-     * @param zone
-     * @param deviceInformationState
-     * @return
-     */
-    private boolean isZoneB(YamahaReceiverBindingConstants.Zone zone, DeviceInformationState deviceInformationState) {
-        return YamahaReceiverBindingConstants.Zone.Zone_2.equals(zone)
-                && deviceInformationState.features.contains(YamahaReceiverBindingConstants.Feature.ZONE_B);
     }
 
     @Override

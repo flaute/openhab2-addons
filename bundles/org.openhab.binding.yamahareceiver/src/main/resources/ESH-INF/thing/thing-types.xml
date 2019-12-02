@@ -119,6 +119,14 @@
 		<description>Control the zone</description>
 		<channels>
 			<channel id="power" typeId="power" />
+			
+			<channel id="zone_b_power" typeId="zone_b_power" />
+			<channel id="zone_b_mute" typeId="zone_b_mute" />
+			<channel id="zone_b_volume" typeId="zone_b_volume" />
+			
+			<channel id="speaker_a" typeId="speaker_a" />
+			<channel id="speaker_b" typeId="speaker_b" />
+			
 			<!--
 				We will provide an input channel dynamically.
 				<channel id="input" typeId="availableinput" />
@@ -136,6 +144,27 @@
 		<item-type>Switch</item-type>
 		<label>Power</label>
 		<description>Power the AVR or zone ON/OFF</description>
+		<category>switch</category>
+	</channel-type>
+
+	<channel-type id="zone_b_power">
+		<item-type>Switch</item-type>
+		<label>Power Zone B</label>
+		<description>Power the zone b ON/OFF</description>
+		<category>switch</category>
+	</channel-type>
+
+	<channel-type id="speaker_a">
+		<item-type>Switch</item-type>
+		<label>Speaker A</label>
+		<description>Switch speaker A ON/OFF</description>
+		<category>switch</category>
+	</channel-type>
+
+	<channel-type id="speaker_b">
+		<item-type>Switch</item-type>
+		<label>Speaker B</label>
+		<description>Switch speaker B ON/OFF</description>
 		<category>switch</category>
 	</channel-type>
 
@@ -205,6 +234,13 @@
 		<category>SoundVolume</category>
 	</channel-type>
 
+	<channel-type id="zone_b_volume">
+		<item-type>Dimmer</item-type>
+		<label>Volume Zone B</label>
+		<description>Set the volume level of zone b</description>
+		<category>SoundVolume</category>
+	</channel-type>
+
 	<channel-type id="volumeDB" advanced="true">
 		<item-type>Number</item-type>
 		<label>Volume in dB</label>
@@ -217,6 +253,13 @@
 		<item-type>Switch</item-type>
 		<label>Mute</label>
 		<description>Enable/Disable Mute on the AVR</description>
+		<category>SoundVolume</category>
+	</channel-type>
+
+	<channel-type id="zone_b_mute">
+		<item-type>Switch</item-type>
+		<label>Mute Zone B</label>
+		<description>Enable/Disable Mute on zone b of the AVR</description>
 		<category>SoundVolume</category>
 	</channel-type>
 

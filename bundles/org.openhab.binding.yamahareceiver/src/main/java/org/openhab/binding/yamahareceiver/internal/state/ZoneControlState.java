@@ -29,5 +29,10 @@ public class ZoneControlState {
     public String surroundProgram = VALUE_EMPTY;
     public float volumeDB = 0.0f; // volume in dB
     public boolean mute = false;
+    public boolean speakerA = false;
+    public boolean speakerB = false;
+    public boolean zoneBPower = false;
+    public boolean zoneBMute = false;
+    public float zoneBVolume = 0.0f;
     public int dialogueLevel = 0;
 }

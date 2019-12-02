@@ -72,4 +72,28 @@ public interface ZoneControl extends IStateUpdatable {
      * @throws ReceivedMessageParseException
      */
     void setScene(String scene) throws IOException, ReceivedMessageParseException;
+
+    /**
+     * Sets the speaker pair A on/off.
+     *
+     * @param on
+     * @throws IOException
+     * @throws ReceivedMessageParseException
+     */
+    void setSpeakerA(boolean on) throws IOException, ReceivedMessageParseException;
+
+    /**
+     * Sets the speaker pair B on/off.
+     *
+     * @param on
+     * @throws IOException
+     * @throws ReceivedMessageParseException
+     */
+    void setSpeakerB(boolean on) throws IOException, ReceivedMessageParseException;
+
+    void setZoneBPower(boolean on) throws IOException, ReceivedMessageParseException;
+
+    void setZoneBMute(boolean on) throws IOException, ReceivedMessageParseException;
+
+    void setZoneBVolume(float volume) throws IOException, ReceivedMessageParseException;
 }

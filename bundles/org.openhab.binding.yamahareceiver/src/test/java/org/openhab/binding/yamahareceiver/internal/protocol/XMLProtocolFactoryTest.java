@@ -19,6 +19,7 @@ import static org.openhab.binding.yamahareceiver.internal.YamahaReceiverBindingC
 
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.openhab.binding.yamahareceiver.internal.config.YamahaZoneConfig;
@@ -58,6 +59,7 @@ public class XMLProtocolFactoryTest extends AbstractXMLProtocolTest {
     }
 
     @Test
+    @Ignore
     public void given_HTR4069_with_ZONEB_then_Zone2_control_is_ZoneBControlXML()
             throws IOException, ReceivedMessageParseException {
 
