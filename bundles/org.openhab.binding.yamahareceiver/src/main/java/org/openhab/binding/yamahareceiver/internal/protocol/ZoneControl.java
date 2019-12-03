@@ -95,5 +95,11 @@ public interface ZoneControl extends IStateUpdatable {
 
     void setZoneBMute(boolean on) throws IOException, ReceivedMessageParseException;
 
+    void setZoneBVolumeDB(float volume) throws IOException, ReceivedMessageParseException;
+
     void setZoneBVolume(float volume) throws IOException, ReceivedMessageParseException;
+
+    void setZoneBVolumeRelative(ZoneControlState state, float percent)
+            throws IOException, ReceivedMessageParseException;
+
 }

@@ -90,18 +90,18 @@ public class ZoneControlXML implements ZoneControl {
             "Speaker_Preout/Speaker_AB/Speaker_B");
     protected boolean speakerBSupported = false;
 
-    protected CommandTemplate powerZoneB = new CommandTemplate(
+    protected CommandTemplate zoneBPower = new CommandTemplate(
             "<Power_Control><Zone_B_Power>%s</Zone_B_Power></Power_Control>", "Power_Control/Zone_B_Power_Info");
-    protected boolean powerZoneBSupported = false;
+    protected boolean zoneBPowerSupported = false;
 
-    protected CommandTemplate muteZoneB = new CommandTemplate("<Volume><Zone_B><Mute>%s</Mute></Zone_B></Volume>",
+    protected CommandTemplate zoneBMute = new CommandTemplate("<Volume><Zone_B><Mute>%s</Mute></Zone_B></Volume>",
             "Volume/Zone_B/Mute");
-    protected boolean muteZoneBSupported = false;
+    protected boolean zoneBMuteSupported = false;
 
-    protected CommandTemplate volumeZoneB = new CommandTemplate(
+    protected CommandTemplate zoneBVolume = new CommandTemplate(
             "<Volume><Zone_B><Lvl><Val>%d</Val><Exp>1</Exp><Unit>dB</Unit></Lvl></Zone_B></Volume>",
             "Volume/Zone_B/Lvl/Val");
-    protected boolean volumeZoneBSupported = false;
+    protected boolean zoneBVolumeSupported = false;
 
     public ZoneControlXML(AbstractConnection con, Zone zone, YamahaZoneConfig zoneSettings,
             ZoneControlStateListener observer, DeviceInformationState deviceInformationState,
@@ -114,17 +114,14 @@ public class ZoneControlXML implements ZoneControl {
         this.observer = observer;
         this.inputConverterSupplier = inputConverterSupplier;
 
-        this.applyModelVariations();
+        this.applyModelVariationsZoneDescriptor();
 
         try {
-
-            Zone z = getZone();
-
             // read the basic status node containing the information needed to determine model variations
-            Node basicStatusNode = getZoneResponse(comReference.get(), z, ZONE_BASIC_STATUS_CMD,
+            Node basicStatusNode = getZoneResponse(comReference.get(), getZone(), ZONE_BASIC_STATUS_CMD,
                     ZONE_BASIC_STATUS_PATH);
 
-            // apply model variations
+            // apply model variations depending on the basic status node
             this.applyModelVariationsSpeakerA(basicStatusNode);
             this.applyModelVariationsSpeakerB(basicStatusNode);
             this.applyModelVariationsPowerControlZoneBPowerInfo(basicStatusNode);
@@ -132,7 +129,7 @@ public class ZoneControlXML implements ZoneControl {
             this.applyModelVariationsSurrPgmSelPgm(basicStatusNode);
 
         } catch (ReceivedMessageParseException | IOException e) {
-            logger.warn("Could not perform feature detection for model variations.", e);
+            logger.warn("Could not perform feature detection on basic status node for model variations.", e);
         }
 
     }
@@ -144,9 +141,9 @@ public class ZoneControlXML implements ZoneControl {
         String speakerA = getNodeContentOrEmpty(basicStatusNode, "Speaker_Preout/Speaker_AB/Speaker_A");
         speakerASupported = StringUtils.isNotEmpty(speakerA);
         if (speakerASupported) {
-            logger.debug("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_SPEAKER_A);
+            logger.trace("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_SPEAKER_A);
         } else {
-            logger.debug("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_SPEAKER_A);
+            logger.trace("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_SPEAKER_A);
         }
     }
 
@@ -157,9 +154,9 @@ public class ZoneControlXML implements ZoneControl {
         String speakerB = getNodeContentOrEmpty(basicStatusNode, "Speaker_Preout/Speaker_AB/Speaker_B");
         speakerBSupported = StringUtils.isNotEmpty(speakerB);
         if (speakerBSupported) {
-            logger.debug("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_SPEAKER_B);
+            logger.trace("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_SPEAKER_B);
         } else {
-            logger.debug("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_SPEAKER_B);
+            logger.trace("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_SPEAKER_B);
         }
 
     }
@@ -169,11 +166,11 @@ public class ZoneControlXML implements ZoneControl {
      */
     protected void applyModelVariationsPowerControlZoneBPowerInfo(Node basicStatusNode) {
         String powerControlZoneBPower = getNodeContentOrEmpty(basicStatusNode, "Power_Control/Zone_B_Power_Info");
-        powerZoneBSupported = StringUtils.isNotEmpty(powerControlZoneBPower);
-        if (powerZoneBSupported) {
-            logger.debug("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_ZONE_B_POWER);
+        zoneBPowerSupported = StringUtils.isNotEmpty(powerControlZoneBPower);
+        if (zoneBPowerSupported) {
+            logger.trace("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_ZONE_B_POWER);
         } else {
-            logger.debug("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_ZONE_B_POWER);
+            logger.trace("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_ZONE_B_POWER);
         }
     }
 
@@ -182,13 +179,13 @@ public class ZoneControlXML implements ZoneControl {
      */
     protected void applyModelVariationsVolumeZoneB(Node basicStatusNode) {
         String volumeZoneB = getNodeContentOrEmpty(basicStatusNode, "Volume/Zone_B");
-        muteZoneBSupported = volumeZoneBSupported = StringUtils.isNotEmpty(volumeZoneB);
-        if (muteZoneBSupported) {
-            logger.debug("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_ZONE_B_MUTE);
-            logger.debug("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_ZONE_B_VOLUME);
+        zoneBMuteSupported = zoneBVolumeSupported = StringUtils.isNotEmpty(volumeZoneB);
+        if (zoneBMuteSupported) {
+            logger.trace("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_ZONE_B_MUTE);
+            logger.trace("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_ZONE_B_VOLUME);
         } else {
-            logger.debug("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_ZONE_B_MUTE);
-            logger.debug("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_ZONE_B_VOLUME);
+            logger.trace("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_ZONE_B_MUTE);
+            logger.trace("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_ZONE_B_VOLUME);
         }
     }
 
@@ -203,18 +200,18 @@ public class ZoneControlXML implements ZoneControl {
         if (StringUtils.isNotEmpty(surroundProgram)) {
             surroundSelProgram = new CommandTemplate(
                     "<Surr><Pgm_Sel><Straight>Off</Straight><Pgm>%s</Pgm></Pgm_Sel></Surr>", "Surr/Pgm_Sel/Pgm");
-            logger.debug("Zone {} - adjusting command to: {}", getZone(), surroundSelProgram);
+            logger.trace("Zone {} - adjusting command to: {}", getZone(), surroundSelProgram);
 
             surroundSelStraight = new CommandTemplate("<Surr><Pgm_Sel><Straight>On</Straight></Pgm_Sel></Surr>",
                     "Surr/Pgm_Sel/Straight");
-            logger.debug("Zone {} - adjusting command to: {}", getZone(), surroundSelStraight);
+            logger.trace("Zone {} - adjusting command to: {}", getZone(), surroundSelStraight);
         }
     }
 
     /**
      * Apply command changes to ensure compatibility with all supported models
      */
-    protected void applyModelVariations() {
+    protected void applyModelVariationsZoneDescriptor() {
         if (zoneDescriptor == null) {
             logger.trace("Zone {} - descriptor not available", getZone());
             return;
@@ -222,29 +219,31 @@ public class ZoneControlXML implements ZoneControl {
 
         logger.trace("Zone {} - compatibility detection", getZone());
 
-        // Note: Detection if scene is supported
+        // detection if scene is supported
         sceneSelSupported = zoneDescriptor.hasCommandEnding("Scene,Scene_Sel", () -> logger
-                .debug("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_SCENE));
+                .trace("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_SCENE));
 
-        // Note: Detection if dialogue level is supported
+        // detection if dialogue level is supported
         dialogueLevelSupported = zoneDescriptor.hasAnyCommandEnding("Sound_Video,Dialogue_Adjust,Dialogue_Lvl",
                 "Sound_Video,Dialogue_Adjust,Dialogue_Lift");
         if (zoneDescriptor.hasCommandEnding("Sound_Video,Dialogue_Adjust,Dialogue_Lift")) {
             dialogueLevel = dialogueLevel.replace("Dialogue_Lvl", "Dialogue_Lift");
-            logger.debug("Zone {} - adjusting command to: {}", getZone(), dialogueLevel);
+            logger.trace("Zone {} - adjusting command to: {}", getZone(), dialogueLevel);
         }
-        if (!dialogueLevelSupported) {
-            logger.debug("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_DIALOGUE_LEVEL);
+        if (dialogueLevelSupported) {
+            logger.trace("Zone {} - the {} channel is supported on your model", getZone(), CHANNEL_DIALOGUE_LEVEL);
+        } else {
+            logger.trace("Zone {} - the {} channel is not supported on your model", getZone(), CHANNEL_DIALOGUE_LEVEL);
         }
 
-        // Note: Detection for RX-V3900, which uses <Vol> instead of <Volume>
+        // detection for RX-V3900, which uses <Vol> instead of <Volume>
         if (zoneDescriptor.hasCommandEnding("Vol,Lvl")) {
             volume = volume.replace("Volume", "Vol");
-            logger.debug("Zone {} - adjusting command to: {}", getZone(), volume);
+            logger.trace("Zone {} - adjusting command to: {}", getZone(), volume);
         }
         if (zoneDescriptor.hasCommandEnding("Vol,Mute")) {
             mute = mute.replace("Volume", "Vol");
-            logger.debug("Zone {} - adjusting command to: {}", getZone(), mute);
+            logger.trace("Zone {} - adjusting command to: {}", getZone(), mute);
         }
     }
 
@@ -379,9 +378,24 @@ public class ZoneControlXML implements ZoneControl {
         value = getNodeContentOrEmpty(statusNode, mute.getPath());
         state.mute = ON.equalsIgnoreCase(value);
 
+        value = getNodeContentOrEmpty(statusNode, zoneBPower.getPath());
+        state.zoneBPower = ON.equalsIgnoreCase(value);
+
+        value = getNodeContentOrEmpty(statusNode, zoneBMute.getPath());
+        state.zoneBMute = ON.equalsIgnoreCase(value);
+
+        value = getNodeContentOrEmpty(statusNode, speakerA.getPath());
+        state.speakerA = ON.equalsIgnoreCase(value);
+
+        value = getNodeContentOrEmpty(statusNode, speakerB.getPath());
+        state.speakerB = ON.equalsIgnoreCase(value);
+
         // The value comes in dB x 10, on AVR it says -30.5dB, the values comes as -305
         value = getNodeContentOrDefault(statusNode, volume.getPath(), String.valueOf(zoneConfig.getVolumeDbMin()));
         state.volumeDB = Float.parseFloat(value) * .1f; // in dB
+
+        value = getNodeContentOrDefault(statusNode, zoneBVolume.getPath(), String.valueOf(zoneConfig.getVolumeDbMin()));
+        state.zoneBVolumeDB = Float.parseFloat(value) * .1f; // in dB
 
         value = getNodeContentOrEmpty(statusNode, inputSel.getPath());
         state.inputID = inputConverterSupplier.get().fromStateName(value);
@@ -403,8 +417,10 @@ public class ZoneControlXML implements ZoneControl {
         value = getNodeContentOrDefault(statusNode, dialogueLevel.getPath(), "0");
         state.dialogueLevel = Integer.parseInt(value);
 
-        logger.debug("Zone {} state - power: {}, mute: {}, volumeDB: {}, input: {}, surroundProgram: {}", getZone(),
-                state.power, state.mute, state.volumeDB, state.inputID, state.surroundProgram);
+        logger.debug(
+                "Zone {} state - power: {}, zoneBPower: {}, mute: {}, zoneBMute: {}, volumeDB: {}, zoneBVolumeDB: {}: input: {}, surroundProgram: {}",
+                getZone(), state.power, state.zoneBPower, state.mute, state.zoneBMute, state.volumeDB,
+                state.zoneBVolumeDB, state.inputID, state.surroundProgram);
 
         observer.zoneStateChanged(state);
     }
@@ -431,27 +447,27 @@ public class ZoneControlXML implements ZoneControl {
 
     @Override
     public void setZoneBPower(boolean on) throws IOException, ReceivedMessageParseException {
-        if (!powerZoneBSupported) {
+        if (!zoneBPowerSupported) {
             return;
         }
-        String cmd = powerZoneB.apply(on ? ON : POWER_STANDBY);
+        String cmd = zoneBPower.apply(on ? ON : POWER_STANDBY);
         sendCommand(cmd);
         update();
     }
 
     @Override
     public void setZoneBMute(boolean on) throws IOException, ReceivedMessageParseException {
-        if (!muteZoneBSupported) {
+        if (!zoneBMuteSupported) {
             return;
         }
-        String cmd = muteZoneB.apply(on ? ON : OFF);
+        String cmd = zoneBMute.apply(on ? ON : OFF);
         sendCommand(cmd);
         update();
     }
 
     @Override
-    public void setZoneBVolume(float volume) throws IOException, ReceivedMessageParseException {
-        if (!volumeZoneBSupported) {
+    public void setZoneBVolumeDB(float volume) throws IOException, ReceivedMessageParseException {
+        if (!zoneBVolumeSupported) {
             return;
         }
 
@@ -466,7 +482,25 @@ public class ZoneControlXML implements ZoneControl {
         // The order matters here. We want to cast to integer first and then scale by 10.
         // Effectively we're only allowing dB values with .0 at the end.
         int vol = (int) volume * 10;
-        sendCommand(this.volumeZoneB.apply(vol));
+        sendCommand(this.zoneBVolume.apply(vol));
         update();
+    }
+
+    @Override
+    public void setZoneBVolume(float volume) throws IOException, ReceivedMessageParseException {
+        if (volume < 0) {
+            volume = 0;
+        }
+        if (volume > 100) {
+            volume = 100;
+        }
+        // Compute value in db
+        setZoneBVolumeDB(zoneConfig.getVolumeDb(volume));
+    }
+
+    @Override
+    public void setZoneBVolumeRelative(ZoneControlState state, float percent)
+            throws IOException, ReceivedMessageParseException {
+        setZoneBVolume(zoneConfig.getVolumePercentage(state.zoneBVolumeDB) + percent);
     }
 }

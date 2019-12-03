@@ -19,14 +19,12 @@ import static org.openhab.binding.yamahareceiver.internal.YamahaReceiverBindingC
 
 import java.io.IOException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.openhab.binding.yamahareceiver.internal.config.YamahaZoneConfig;
 import org.openhab.binding.yamahareceiver.internal.protocol.xml.AbstractXMLProtocolTest;
 import org.openhab.binding.yamahareceiver.internal.protocol.xml.DeviceInformationXML;
 import org.openhab.binding.yamahareceiver.internal.protocol.xml.XMLProtocolFactory;
-import org.openhab.binding.yamahareceiver.internal.protocol.xml.ZoneBControlXML;
 import org.openhab.binding.yamahareceiver.internal.protocol.xml.ZoneControlXML;
 import org.openhab.binding.yamahareceiver.internal.state.DeviceInformationState;
 import org.openhab.binding.yamahareceiver.internal.state.ZoneControlStateListener;
@@ -56,24 +54,6 @@ public class XMLProtocolFactoryTest extends AbstractXMLProtocolTest {
         when(con.sendReceive(eq("<Zone_2><Basic_Status>GetParam</Basic_Status></Zone_2>"))).thenReturn("<xml></xml>");
 
         subject = new XMLProtocolFactory();
-    }
-
-    @Test
-    @Ignore
-    public void given_HTR4069_with_ZONEB_then_Zone2_control_is_ZoneBControlXML()
-            throws IOException, ReceivedMessageParseException {
-
-        // arrange
-        ctx.prepareForModel("HTR-4069");
-
-        DeviceInformationXML deviceInformation = new DeviceInformationXML(con, state);
-        deviceInformation.update();
-
-        // act
-        ZoneControl zoneControl = subject.ZoneControl(con, zoneConfig, zoneControlStateListener, () -> null, state);
-
-        // assert
-        assertTrue("Created ZoneB control", zoneControl instanceof ZoneBControlXML);
     }
 
     @Test

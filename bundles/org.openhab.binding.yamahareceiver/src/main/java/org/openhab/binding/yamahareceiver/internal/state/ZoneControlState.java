@@ -33,6 +33,6 @@ public class ZoneControlState {
     public boolean speakerB = false;
     public boolean zoneBPower = false;
     public boolean zoneBMute = false;
-    public float zoneBVolume = 0.0f;
+    public float zoneBVolumeDB = 0.0f;
     public int dialogueLevel = 0;
 }

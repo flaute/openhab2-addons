@@ -19,7 +19,6 @@ import static org.openhab.binding.yamahareceiver.internal.YamahaReceiverBindingC
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openhab.binding.yamahareceiver.internal.protocol.ReceivedMessageParseException;
 import org.openhab.binding.yamahareceiver.internal.state.DeviceInformationState;
@@ -39,22 +38,6 @@ public class DeviceInformationXMLTest extends AbstractXMLProtocolTest {
     public void onSetUp() {
         state = new DeviceInformationState();
         subject = new DeviceInformationXML(con, state);
-    }
-
-    @Test
-    @Ignore
-    public void when_HTR4069_then_detects_featureZoneB_and_addsZone2()
-            throws IOException, ReceivedMessageParseException {
-
-        // arrange
-        ctx.prepareForModel("HTR-4069");
-
-        // act
-        subject.update();
-
-        // assert
-        // assertTrue("ZONE_B detected", state.features.contains(ZONE_B));
-        assertTrue("Zone_2 added", state.zones.contains(Zone_2));
     }
 
     @Test

@@ -59,6 +59,7 @@ public class YamahaReceiverBindingConstants {
     public static final String CHANNEL_ZONE_B_POWER = "zone_b_power";
     public static final String CHANNEL_ZONE_B_MUTE = "zone_b_mute";
     public static final String CHANNEL_ZONE_B_VOLUME = "zone_b_volume";
+    public static final String CHANNEL_ZONE_B_VOLUME_DB = "zone_b_volumeDB";
 
     // List of channel IDs for navigation control: Read/Write
     public static final String CHANNEL_NAVIGATION_MENU = "navigation_menu"; // Navigate either in the current menu
