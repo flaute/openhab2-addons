@@ -91,14 +91,50 @@ public interface ZoneControl extends IStateUpdatable {
      */
     void setSpeakerB(boolean on) throws IOException, ReceivedMessageParseException;
 
+    /**
+     * Switches the zone B power on/off.
+     * 
+     * @param on
+     * @throws IOException
+     * @throws ReceivedMessageParseException
+     */
     void setZoneBPower(boolean on) throws IOException, ReceivedMessageParseException;
 
+    /**
+     * Switches the zone b mute on/off.
+     * 
+     * @param on
+     * @throws IOException
+     * @throws ReceivedMessageParseException
+     */
     void setZoneBMute(boolean on) throws IOException, ReceivedMessageParseException;
 
+    /**
+     * Sets the zone b volume in decibel.
+     * 
+     * @param volume
+     * @throws IOException
+     * @throws ReceivedMessageParseException
+     */
     void setZoneBVolumeDB(float volume) throws IOException, ReceivedMessageParseException;
 
+    /**
+     * Sets the zone b volume in percent.
+     * 
+     * @param volume
+     * @throws IOException
+     * @throws ReceivedMessageParseException
+     */
     void setZoneBVolume(float volume) throws IOException, ReceivedMessageParseException;
 
+    /**
+     * Increases or decreases the zone b volume by the given percentage.
+     * 
+     * @param state
+     * @param percent
+     * @throws IOException
+     * @throws ReceivedMessageParseException
+     */
     void setZoneBVolumeRelative(ZoneControlState state, float percent)
             throws IOException, ReceivedMessageParseException;
 

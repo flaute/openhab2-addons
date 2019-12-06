@@ -53,14 +53,6 @@ public class YamahaReceiverBindingConstants {
     public static final String CHANNEL_PARTY_MODE_MUTE = "party_mode_mute";
     public static final String CHANNEL_PARTY_MODE_VOLUME = "party_mode_volume";
 
-    public static final String CHANNEL_SPEAKER_A = "speaker_a";
-    public static final String CHANNEL_SPEAKER_B = "speaker_b";
-
-    public static final String CHANNEL_ZONE_B_POWER = "zone_b_power";
-    public static final String CHANNEL_ZONE_B_MUTE = "zone_b_mute";
-    public static final String CHANNEL_ZONE_B_VOLUME = "zone_b_volume";
-    public static final String CHANNEL_ZONE_B_VOLUME_DB = "zone_b_volumeDB";
-
     // List of channel IDs for navigation control: Read/Write
     public static final String CHANNEL_NAVIGATION_MENU = "navigation_menu"; // Navigate either in the current menu
                                                                             // or to the full menu path if "/" is used.
@@ -117,6 +109,14 @@ public class YamahaReceiverBindingConstants {
     public static final String CHANNEL_GROUP_PLAYBACK = "playback_channels";
     public static final String CHANNEL_GROUP_NAVIGATION = "navigation_channels";
     public static final String CHANNEL_GROUP_ZONE = "zone_channels";
+
+    public static final String CHANNEL_SPEAKER_A = "speaker_a";
+    public static final String CHANNEL_SPEAKER_B = "speaker_b";
+
+    public static final String CHANNEL_ZONE_B_POWER = "zone_b_power";
+    public static final String CHANNEL_ZONE_B_MUTE = "zone_b_mute";
+    public static final String CHANNEL_ZONE_B_VOLUME = "zone_b_volume";
+    public static final String CHANNEL_ZONE_B_VOLUME_DB = "zone_b_volumeDB";
 
     /**
      * The names of this enum are part of the protocols!

@@ -275,30 +275,6 @@ public class YamahaZoneThingHandler extends BaseThingHandler
                 case CHANNEL_POWER:
                     zoneControl.setPower(((OnOffType) command) == OnOffType.ON);
                     break;
-                case CHANNEL_SPEAKER_A:
-                    zoneControl.setSpeakerA(((OnOffType) command) == OnOffType.ON);
-                    break;
-                case CHANNEL_SPEAKER_B:
-                    zoneControl.setSpeakerB(((OnOffType) command) == OnOffType.ON);
-                    break;
-                case CHANNEL_ZONE_B_POWER:
-                    zoneControl.setZoneBPower(((OnOffType) command) == OnOffType.ON);
-                    break;
-                case CHANNEL_ZONE_B_MUTE:
-                    zoneControl.setZoneBMute(((OnOffType) command) == OnOffType.ON);
-                    break;
-                case CHANNEL_ZONE_B_VOLUME_DB:
-                    zoneControl.setZoneBVolumeDB(((DecimalType) command).floatValue());
-                    break;
-                case CHANNEL_ZONE_B_VOLUME:
-                    if (command instanceof DecimalType) {
-                        zoneControl.setZoneBVolume(((DecimalType) command).floatValue());
-                    } else if (command instanceof IncreaseDecreaseType) {
-                        zoneControl.setZoneBVolumeRelative(zoneState,
-                                (((IncreaseDecreaseType) command) == IncreaseDecreaseType.INCREASE ? 1 : -1)
-                                        * zoneConfig.getVolumeRelativeChangeFactor());
-                    }
-                    break;
                 case CHANNEL_INPUT:
                     zoneControl.setInput(((StringType) command).toString());
                     break;
@@ -476,6 +452,30 @@ public class YamahaZoneThingHandler extends BaseThingHandler
                         }
                     }
                     break;
+                case CHANNEL_SPEAKER_A:
+                    zoneControl.setSpeakerA(((OnOffType) command) == OnOffType.ON);
+                    break;
+                case CHANNEL_SPEAKER_B:
+                    zoneControl.setSpeakerB(((OnOffType) command) == OnOffType.ON);
+                    break;
+                case CHANNEL_ZONE_B_POWER:
+                    zoneControl.setZoneBPower(((OnOffType) command) == OnOffType.ON);
+                    break;
+                case CHANNEL_ZONE_B_MUTE:
+                    zoneControl.setZoneBMute(((OnOffType) command) == OnOffType.ON);
+                    break;
+                case CHANNEL_ZONE_B_VOLUME_DB:
+                    zoneControl.setZoneBVolumeDB(((DecimalType) command).floatValue());
+                    break;
+                case CHANNEL_ZONE_B_VOLUME:
+                    if (command instanceof DecimalType) {
+                        zoneControl.setZoneBVolume(((DecimalType) command).floatValue());
+                    } else if (command instanceof IncreaseDecreaseType) {
+                        zoneControl.setZoneBVolumeRelative(zoneState,
+                                (((IncreaseDecreaseType) command) == IncreaseDecreaseType.INCREASE ? 1 : -1)
+                                        * zoneConfig.getVolumeRelativeChangeFactor());
+                    }
+                    break;
                 default:
                     logger.warn("Channel {} not supported!", id);
             }
@@ -505,18 +505,6 @@ public class YamahaZoneThingHandler extends BaseThingHandler
             updateState(channelUID, new PercentType((int) zoneConfig.getVolumePercentage(zoneState.volumeDB)));
         } else if (id.equals(grpZone(CHANNEL_MUTE))) {
             updateState(channelUID, zoneState.mute ? OnOffType.ON : OnOffType.OFF);
-        } else if (id.equals(grpZone(CHANNEL_SPEAKER_A))) {
-            updateState(channelUID, zoneState.speakerA ? OnOffType.ON : OnOffType.OFF);
-        } else if (id.equals(grpZone(CHANNEL_SPEAKER_B))) {
-            updateState(channelUID, zoneState.speakerB ? OnOffType.ON : OnOffType.OFF);
-        } else if (id.equals(grpZone(CHANNEL_ZONE_B_POWER))) {
-            updateState(channelUID, zoneState.zoneBPower ? OnOffType.ON : OnOffType.OFF);
-        } else if (id.equals(grpZone(CHANNEL_ZONE_B_MUTE))) {
-            updateState(channelUID, zoneState.zoneBMute ? OnOffType.ON : OnOffType.OFF);
-        } else if (id.equals(grpZone(CHANNEL_ZONE_B_VOLUME_DB))) {
-            updateState(channelUID, new DecimalType(zoneState.zoneBVolumeDB));
-        } else if (id.equals(grpZone(CHANNEL_ZONE_B_VOLUME))) {
-            updateState(channelUID, new PercentType((int) zoneConfig.getVolumePercentage(zoneState.zoneBVolumeDB)));
         } else if (id.equals(grpZone(CHANNEL_INPUT))) {
             updateState(channelUID, new StringType(zoneState.inputID));
         } else if (id.equals(grpZone(CHANNEL_SURROUND))) {
@@ -551,6 +539,20 @@ public class YamahaZoneThingHandler extends BaseThingHandler
             updateState(channelUID, new DecimalType(navigationInfoState.currentLine));
         } else if (id.equals(grpNav(CHANNEL_NAVIGATION_TOTAL_ITEMS))) {
             updateState(channelUID, new DecimalType(navigationInfoState.maxLine));
+
+        } else if (id.equals(grpZone(CHANNEL_SPEAKER_A))) {
+            updateState(channelUID, zoneState.speakerA ? OnOffType.ON : OnOffType.OFF);
+        } else if (id.equals(grpZone(CHANNEL_SPEAKER_B))) {
+            updateState(channelUID, zoneState.speakerB ? OnOffType.ON : OnOffType.OFF);
+        } else if (id.equals(grpZone(CHANNEL_ZONE_B_POWER))) {
+            updateState(channelUID, zoneState.zoneBPower ? OnOffType.ON : OnOffType.OFF);
+        } else if (id.equals(grpZone(CHANNEL_ZONE_B_MUTE))) {
+            updateState(channelUID, zoneState.zoneBMute ? OnOffType.ON : OnOffType.OFF);
+        } else if (id.equals(grpZone(CHANNEL_ZONE_B_VOLUME_DB))) {
+            updateState(channelUID, new DecimalType(zoneState.zoneBVolumeDB));
+        } else if (id.equals(grpZone(CHANNEL_ZONE_B_VOLUME))) {
+            updateState(channelUID, new PercentType((int) zoneConfig.getVolumePercentage(zoneState.zoneBVolumeDB)));
+
         } else {
             logger.warn("Channel {} not implemented!", id);
         }
@@ -564,22 +566,20 @@ public class YamahaZoneThingHandler extends BaseThingHandler
         updateStatus(ThingStatus.ONLINE);
 
         updateState(grpZone(CHANNEL_POWER), zoneState.power ? OnOffType.ON : OnOffType.OFF);
-
-        updateState(grpZone(CHANNEL_ZONE_B_POWER), zoneState.zoneBPower ? OnOffType.ON : OnOffType.OFF);
-        updateState(grpZone(CHANNEL_ZONE_B_MUTE), zoneState.zoneBMute ? OnOffType.ON : OnOffType.OFF);
-        updateState(grpZone(CHANNEL_ZONE_B_VOLUME_DB), new DecimalType(zoneState.zoneBVolumeDB));
-        updateState(grpZone(CHANNEL_ZONE_B_VOLUME),
-                new PercentType((int) zoneConfig.getVolumePercentage(zoneState.zoneBVolumeDB)));
-
-        updateState(grpZone(CHANNEL_SPEAKER_A), zoneState.speakerA ? OnOffType.ON : OnOffType.OFF);
-        updateState(grpZone(CHANNEL_SPEAKER_B), zoneState.speakerB ? OnOffType.ON : OnOffType.OFF);
-
         updateState(grpZone(CHANNEL_INPUT), new StringType(zoneState.inputID));
         updateState(grpZone(CHANNEL_SURROUND), new StringType(zoneState.surroundProgram));
         updateState(grpZone(CHANNEL_VOLUME_DB), new DecimalType(zoneState.volumeDB));
         updateState(grpZone(CHANNEL_VOLUME), new PercentType((int) zoneConfig.getVolumePercentage(zoneState.volumeDB)));
         updateState(grpZone(CHANNEL_MUTE), zoneState.mute ? OnOffType.ON : OnOffType.OFF);
         updateState(grpZone(CHANNEL_DIALOGUE_LEVEL), new DecimalType(zoneState.dialogueLevel));
+
+        updateState(grpZone(CHANNEL_SPEAKER_A), zoneState.speakerA ? OnOffType.ON : OnOffType.OFF);
+        updateState(grpZone(CHANNEL_SPEAKER_B), zoneState.speakerB ? OnOffType.ON : OnOffType.OFF);
+        updateState(grpZone(CHANNEL_ZONE_B_POWER), zoneState.zoneBPower ? OnOffType.ON : OnOffType.OFF);
+        updateState(grpZone(CHANNEL_ZONE_B_MUTE), zoneState.zoneBMute ? OnOffType.ON : OnOffType.OFF);
+        updateState(grpZone(CHANNEL_ZONE_B_VOLUME_DB), new DecimalType(zoneState.zoneBVolumeDB));
+        updateState(grpZone(CHANNEL_ZONE_B_VOLUME),
+                new PercentType((int) zoneConfig.getVolumePercentage(zoneState.zoneBVolumeDB)));
 
         // If the input changed
         if (inputChanged) {
